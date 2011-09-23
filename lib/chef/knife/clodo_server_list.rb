@@ -32,7 +32,7 @@ class Chef
                          when 'is_suspended'
                            ui.color(server.state.downcase, :red)
                          when 'is_disabled', 'is_request'
-                           ui.color(server.state.downcase, :lightgrey)
+                           ui.color(server.state.downcase, :cyan)
                          when 'is_install'
                            ui.color(server.state.downcase, :yellow)
                          when 'is_running'
@@ -40,8 +40,8 @@ class Chef
                          else
                            ui.color(server.state.upcase, :red)
                          end
-          puts ui.list(server_list, :columnt_across, 7)
         end
+        puts ui.list(server_list, :columns_across, 7)
       end
     end
   end

@@ -35,12 +35,10 @@ class Chef
         end
 
         def connection
-          @connection ||= Fog::Compute.new(
-                                           :provider => 'Clodo',
-                                           :clodo_api_key => Chef::Config[:knife][:clodo_api_key],
-                                           :clodo_username => (Chef::Config[:knife][:clodo_username] || Chef::Config[:knife][:clodo_api_username]),
-                                           :clodo_auth_url => Chef::Config[:knife][:clodo_api_auth_url] || config[:clodo_api_auth_url]
-                                           )
+          @connection ||= Fog::Compute::Clodo.new({
+                                                    :clodo_api_key => Chef::Config[:knife][:clodo_api_key],
+                                                    :clodo_username => (Chef::Config[:knife][:clodo_username] || Chef::Config[:knife][:clodo_api_username]),
+                                                    :clodo_auth_url => Chef::Config[:knife][:clodo_api_auth_url] || config[:clodo_api_auth_url]})
         end
 
         def locate_config_value(key)
