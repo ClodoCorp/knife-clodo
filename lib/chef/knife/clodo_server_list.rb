@@ -1,4 +1,4 @@
-require 'chef/knife/rackspace_base'
+require 'chef/knife/clodo_base'
 
 class Chef
   class Knife
@@ -23,7 +23,7 @@ class Chef
 
         connection.servers.each do |server|
           server_list << server.id.to_s
-          server_list << server.public_ip_address?server.public_ip_address:""
+          server_list << (server.public_ip_address ? server.public_ip_address : "")
           server_list << server.image_id
           server_list << server.name
           server_list << server.vps_vnc
@@ -37,6 +37,8 @@ class Chef
                            ui.color(server.state.downcase, :yellow)
                          when 'is_running'
                            ui.color(server.state.downcase, :green)
+                         else
+                           ui.color(server.state.upcase, :red)
                          end
           puts ui.list(server_list, :columnt_across, 7)
         end
