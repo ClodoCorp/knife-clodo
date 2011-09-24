@@ -86,6 +86,27 @@ class Chef
       :long => "--bootstrap-version VERSION",
       :description => "The version of Chef to install",
       :proc => Proc.new { |v| Chef::Config[:knife][:bootstrap_version] = v }
+      option :prerelease,
+      :long => "--prerelease",
+      :description => "Install the pre-release chef gems"
+
+      option :bootstrap_version,
+      :long => "--bootstrap-version VERSION",
+      :description => "The version of Chef to install",
+      :proc => Proc.new { |v| Chef::Config[:knife][:bootstrap_version] = v }
+
+      option :distro,
+      :short => "-d DISTRO",
+      :long => "--distro DISTRO",
+      :description => "Bootstrap a distro using a template; default is 'debian6apt'",
+      :proc => Proc.new { |d| Chef::Config[:knife][:distro] = d },
+      :default => "debian6apt"
+
+      option :template_file,
+      :long => "--template-file TEMPLATE",
+      :description => "Full path to location of template to use",
+      :proc => Proc.new { |t| Chef::Config[:knife][:template_file] = t },
+      :default => false
 
       option :run_list,
       :short => "-r RUN_LIST",
