@@ -48,9 +48,9 @@ class Chef
 
         def public_dns_name(server)
           @public_dns_name ||= begin
-                                 Resolv.getname(server.addresses["public"][0])
+                                 Resolv.getname(server.public_ip_address)
                                rescue
-                                 "#{server.addresses["public"][0].gsub('.','-')}.clodo.ru"
+                                 "#{server.public_ip_address.gsub('.','-')}.clodo.ru"
                                end
         end
 
