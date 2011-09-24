@@ -154,21 +154,21 @@ class Chef
         puts("\n")
 
         puts "#{ui.color("Public DNS Name", :cyan)}: #{public_dns_name(server)}"
-        puts "#{ui.color("Public IP Address", :cyan)}: #{server.addresses["public"][0]}"
+        puts "#{ui.color("Public IP Address", :cyan)}: #{server.public_ip_address}"
         puts "#{ui.color("Password", :cyan)}: #{server.password}"
 
         print "\n#{ui.color("Waiting for sshd", :magenta)}"
 
-        print(".") until tcp_test_ssh(server.addresses["public"][0]) { sleep @initial_sleep_delay ||= 10; puts("done") }
+        print(".") until tcp_test_ssh(server.public_ip_address) { sleep @initial_sleep_delay ||= 10; puts("done") }
 
         bootstrap_for_node(server).run
 
         puts "\n"
         puts "#{ui.color("Instance ID", :cyan)}: #{server.id}"
         puts "#{ui.color("Name", :cyan)}: #{server.name}"
-        puts "#{ui.color("Image", :cyan)}: #{server.image.name}"
+        puts "#{ui.color("Image", :cyan)}: #{server.image}"
         puts "#{ui.color("Public DNS Name", :cyan)}: #{public_dns_name(server)}"
-        puts "#{ui.color("Public IP Address", :cyan)}: #{server.addresses["public"][0]}"
+        puts "#{ui.color("Public IP Address", :cyan)}: #{server.public_ip_address}"
         puts "#{ui.color("Password", :cyan)}: #{server.password}"
         puts "#{ui.color("Environment", :cyan)}: #{config[:environment] || '_default'}"
         puts "#{ui.color("Run List", :cyan)}: #{config[:run_list].join(', ')}"
