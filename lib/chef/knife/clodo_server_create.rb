@@ -14,7 +14,7 @@ class Chef
         Chef::Knife::Bootstrap.load_deps
       end
 
-      banner "knife clodo.ru  server create (options)"
+      banner "knife clodo server create (options)"
 
       option :image,
       :short => "-I IMAGE",
