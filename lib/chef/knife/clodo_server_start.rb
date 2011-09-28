@@ -11,7 +11,7 @@ class Chef
       option :server,
       :long => "--server ID",
       :description => "The ID of the server",
-      :proc => Proc.new { |f| Chef::Config[:knife][:server_id] = f.to_i },
+      :proc => Proc.new { |f| Chef::Config[:knife][:server_id] = f.to_i }
 
       def run
         $stdout.sync = true
