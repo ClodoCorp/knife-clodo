@@ -1,0 +1,49 @@
+knife-clodo is a knife plugin for Clodo.Ru API.
+
+It uses fog library to interact with API.
+
+At this time fog's provider for clodo is not in upstream Git,
+so you need to manually download the sources of patched to 
+support clodo fog source tree, build and install gem from it.
+
+
+Usage is simple as:
+
+Write authorization data in your knife.rb as below:
+knife[:clodo_username]		=	'your@registration.email.net'     # Your email used to authorise in clodo.ru billing.
+knife[:clodo_api_key]		=	'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX' # Your API key
+knife[:clodo_api_auth_url]	=	'testapi.kh.clodo.ru'             # Domain name of API server.
+
+Next type in command line:
+
+knife clodo server
+(to list available commands)
+
+knife clodo server list
+(To list your virtual servers)
+
+knife clodo server start --server=10474
+(where 10474 in --server=10474 is an ID of virtual server to 
+start)
+
+knife clodo server start --all
+(that will request start for all the servers that is not in 
+"is_running" or "is_request" state)
+
+knife clodo server create -d debian6apt -r "recipe[vds-performance-tests]" --server-disk=5 --server-memory=256 --server-memory-max=512 -I 541
+(where:
+-d debian6apt - is a bootstrap template to setup newly installed server for your current chef environment
+At now only Debian 6 with chef's (0.10) installation with apt-get supported
+
+-r "recipe[vds-performance-tests]" - is runlist, that in this example includes default recipe from "vds-performance-tests" cookbook
+
+--server-disk=5 - disk size of 5 gigabytes for newly created server (default is 10Gb)
+
+--server-memory=256 - low limit of memory scaling in megabytes
+
+--server-memory-max=512 - high limit of memory scaling in megabytes
+
+-I 541 - OS image to install (Debian 6 amd64) (OS images list will be added to knife-clodo in next version)
+
+--server-type here is in it's default value (scale). You can also set it to static.
+)
