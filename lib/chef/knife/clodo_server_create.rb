@@ -86,6 +86,12 @@ class Chef
       :long => "--bootstrap-version VERSION",
       :description => "The version of Chef to install",
       :proc => Proc.new { |v| Chef::Config[:knife][:bootstrap_version] = v }
+
+      option :bootstrap_delay,
+      :long => "--bootstrap-delay SEC",
+      :description => "Delay in seconds between SSH is available and bootstrap begin. (Default is 15 sec.)",
+      :default => 15
+
       option :prerelease,
       :long => "--prerelease",
       :description => "Install the pre-release chef gems"
@@ -180,7 +186,7 @@ class Chef
 
         print "\n#{ui.color("Waiting for sshd", :magenta)}"
 
-        print(".") until tcp_test_ssh(server.public_ip_address) { sleep @initial_sleep_delay ||= 10; puts("done") }
+        print(".") until tcp_test_ssh(server.public_ip_address) { sleep @initial_sleep_delay ||= config[:bootstrap_delay]; puts("done") }
 
         bootstrap_for_node(server).run
 
