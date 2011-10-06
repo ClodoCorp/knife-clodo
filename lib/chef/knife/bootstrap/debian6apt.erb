@@ -1,6 +1,11 @@
 bash -c '
 <%= "export http_proxy=\"#{knife_config[:bootstrap_proxy]}\"" if knife_config[:bootstrap_proxy] -%>
 
+while [ -e /var/adm/autoinstall/init.d/* ] do
+	echo "Autoinstallation still in progress. Waiting 5sec...";
+	sleep 5;
+done
+
 if [ ! -f /usr/bin/chef-client ]; then
   echo "chef	chef/chef_server_url	string	<%= @chef_config[:chef_server_url] %>" | debconf-set-selections
   [ -f /etc/apt/sources.list.d/opscode.list ] || echo "deb http://apt.opscode.com <%= chef_version.to_f == 0.10 ? "squeeze-0.10" : "squeeze" %> main" > /etc/apt/sources.list.d/opscode.list
