@@ -186,7 +186,7 @@ class Chef
 
         print "\n#{ui.color("Waiting for sshd", :magenta)}"
 
-        print(".") until tcp_test_ssh(server.public_ip_address) { sleep @initial_sleep_delay ||= config[:bootstrap_delay]; puts("done") }
+        print(".") until tcp_test_ssh(server.public_ip_address) { sleep @initial_sleep_delay ||= config[:bootstrap_delay].to_i; puts("done") }
 
         bootstrap_for_node(server).run
 
