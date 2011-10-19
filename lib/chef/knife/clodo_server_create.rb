@@ -84,8 +84,7 @@ class Chef
 
       option :bootstrap_version,
       :long => "--bootstrap-version VERSION",
-      :description => "The version of Chef to install",
-      :proc => Proc.new { |v| Chef::Config[:knife][:bootstrap_version] = v }
+      :description => "The version of Chef to install"
 
       option :bootstrap_delay,
       :long => "--bootstrap-delay SEC",
