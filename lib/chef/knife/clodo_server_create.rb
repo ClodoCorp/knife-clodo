@@ -104,14 +104,11 @@ class Chef
       option :distro,
       :short => "-d DISTRO",
       :long => "--distro DISTRO",
-      :description => "Bootstrap a distro using a template; default is 'debian6apt'",
-      :proc => Proc.new { |d| Chef::Config[:knife][:distro] = d },
-      :default => "debian6apt"
+      :description => "Bootstrap a distro using a template; default is 'debian6apt'"
 
       option :template_file,
       :long => "--template-file TEMPLATE",
       :description => "Full path to location of template to use",
-      :proc => Proc.new { |t| Chef::Config[:knife][:template_file] = t },
       :default => false
 
       option :run_list,
@@ -155,11 +152,11 @@ class Chef
         end
 
         options = {
-          :vps_type => Chef::Config[:knife][:server_type],
-          :vps_memory => Chef::Config[:knife][:server_memory],
-          :vps_memory_max => Chef::Config[:knife][:server_memory_max],
-          :vps_hdd => Chef::Config[:knife][:server_disk],
-          :vps_admin => Chef::Config[:knife][:server_support_level],
+          :vps_type => Chef::Config[:knife][:server_type] || config[:server_type],
+          :vps_memory => Chef::Config[:knife][:server_memory] || config[:server_memory],
+          :vps_memory_max => Chef::Config[:knife][:server_memory_max] || config[:server_memory_max],
+          :vps_hdd => Chef::Config[:knife][:server_disk] || config[:server_disk],
+          :vps_admin => Chef::Config[:knife][:server_support_level] || config[:server_support_level],
           :vps_os => Chef::Config[:knife][:image]
         }
 
@@ -188,7 +185,12 @@ class Chef
 
         print(".") until tcp_test_ssh(server.public_ip_address) { sleep @initial_sleep_delay ||= config[:bootstrap_delay].to_i; puts("done") }
 
-        bootstrap_for_node(server).run
+	if File::exists? "#{ENV['HOME']}/.ssh/id_rsa.pub"
+	        server.public_key_path = "#{ENV['HOME']}/.ssh/id_rsa.pub" 
+	        server.setup({:password => server.password})
+	end
+
+        bootstrap_for_node(server).run if Chef::Config[:knife][:distro] || Chef::Config[:knife][:template_file]
 
         puts "\n"
         puts "#{ui.color("Instance ID", :cyan)}: #{server.id}"
