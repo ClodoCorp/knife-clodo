@@ -32,9 +32,9 @@ class Chef
 
         def connection
           @connection ||= Fog::Compute::Clodo.new({
-                                                    :clodo_api_key  => locate_config_value 'clodo_api_key',
-                                                    :clodo_username => locate_config_value 'clodo_username',
-                                                    :clodo_auth_url => locate_config_value 'clodo_api_auth_url' || 'api.clodo.ru'})
+                                                    :clodo_api_key  => locate_config_value(:clodo_api_key),
+                                                    :clodo_username => locate_config_value(:clodo_username),
+                                                    :clodo_auth_url => locate_config_value(:clodo_api_auth_url) || 'api.clodo.ru'})
         end
 
         def locate_config_value(key)

@@ -140,18 +140,18 @@ class Chef
       def run
         $stdout.sync = true
 
-        unless Chef::Config[:knife][:image]
+        unless locate_config_value(:image)
           ui.error("You have not provided a valid image value.  Please note the short option for this value recently changed from '-i' to '-I'.")
           exit 1
         end
 
         options = {
-          :vps_type => Chef::Config[:knife][:server_type] || config[:server_type],
-          :vps_memory => Chef::Config[:knife][:server_memory] || config[:server_memory],
-          :vps_memory_max => Chef::Config[:knife][:server_memory_max] || config[:server_memory_max],
-          :vps_hdd => Chef::Config[:knife][:server_disk] || config[:server_disk],
-          :vps_admin => Chef::Config[:knife][:server_support_level] || config[:server_support_level],
-          :vps_os => Chef::Config[:knife][:image]
+          :vps_type       => locate_config_value(:server_type),
+          :vps_memory     => locate_config_value(:server_memory),
+          :vps_memory_max => locate_config_value(:server_memory_max),
+          :vps_hdd        => locate_config_value(:server_disk),
+          :vps_admin      => locate_config_value(:server_support_level),
+          :vps_os         => locate_config_value(:image)
         }
 
         options[:name] = config[:server_name] if config[:server_name]
