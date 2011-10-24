@@ -1,7 +1,7 @@
 bash -c '
 <%= "export http_proxy=\"#{knife_config[:bootstrap_proxy]}\"" if knife_config[:bootstrap_proxy] -%>
 
-while [ -e /var/adm/autoinstall/init.d/* ] do
+while [ -d /var/adm/autoinstall/init.d -a -e /var/adm/autoinstall/init.d/* ] do
 	echo "Autoinstallation still in progress. Waiting 5sec...";
 	sleep 5;
 done
