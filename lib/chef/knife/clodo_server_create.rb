@@ -118,7 +118,6 @@ class Chef
         if readable
           Chef::Log.debug("sshd accepting connections on #{hostname}, banner is #{tcp_socket.gets}")
           yield
-          true
         else
           false
         end
@@ -154,7 +153,7 @@ class Chef
           :vps_os         => locate_config_value(:image)
         }
 
-        options[:name] = config[:server_name] if config[:server_name]
+        options[:vps_title] = config[:server_name] if config[:server_name]
 
         server = connection.servers.create(options)
 
@@ -167,30 +166,28 @@ class Chef
         print "\n#{ui.color("Waiting server", :magenta)}"
 
         # wait for it to be ready to do stuff
-        server.wait_for { print "."; ready? }
+        server.wait_for(600, 10) do print "."; ready? end
 
         puts("\n")
 
-        puts "#{ui.color("Public DNS Name", :cyan)}: #{public_dns_name(server)}"
         puts "#{ui.color("Public IP Address", :cyan)}: #{server.public_ip_address}"
         puts "#{ui.color("Password", :cyan)}: #{server.password}"
 
         print "\n#{ui.color("Waiting for sshd", :magenta)}"
 
-        print(".") until tcp_test_ssh(server.public_ip_address) { sleep @initial_sleep_delay ||= config[:bootstrap_delay].to_i; puts("done") }
+        print(".") until tcp_test_ssh(server.public_ip_address) { sleep @initial_sleep_delay ||= config[:bootstrap_delay].to_i; true; }
 
 	if File::exists? "#{ENV['HOME']}/.ssh/id_rsa.pub"
 	        server.public_key_path = "#{ENV['HOME']}/.ssh/id_rsa.pub" 
 	        server.setup({:password => server.password})
 	end
 
-        bootstrap_for_node(server).run if Chef::Config[:knife][:distro] || Chef::Config[:knife][:template_file]
+        bootstrap_for_node(server).run if locate_config_value(:distro) || locate_config_value(:template_file)
 
         puts "\n"
         puts "#{ui.color("Instance ID", :cyan)}: #{server.id}"
         puts "#{ui.color("Name", :cyan)}: #{server.name}"
         puts "#{ui.color("Image", :cyan)}: #{server.image}"
-        puts "#{ui.color("Public DNS Name", :cyan)}: #{public_dns_name(server)}"
         puts "#{ui.color("Public IP Address", :cyan)}: #{server.public_ip_address}"
         puts "#{ui.color("Password", :cyan)}: #{server.password}"
         puts "#{ui.color("Environment", :cyan)}: #{config[:environment] || '_default'}"
@@ -199,7 +196,7 @@ class Chef
 
       def bootstrap_for_node(server)
         bootstrap = Chef::Knife::Bootstrap.new
-        bootstrap.name_args = [public_dns_name(server)]
+        bootstrap.name_args = [server.public_ip_address]
         bootstrap.config[:run_list] = config[:run_list]
         bootstrap.config[:ssh_user] = config[:ssh_user] || "root"
         bootstrap.config[:ssh_password] = server.password
@@ -209,9 +206,9 @@ class Chef
         bootstrap.config[:bootstrap_version] = locate_config_value(:bootstrap_version)
         # bootstrap will run as root...sudo (by default) also messes up Ohai on CentOS boxes
         bootstrap.config[:use_sudo] = true unless config[:ssh_user] == 'root'
-        bootstrap.config[:environment] = config[:environment]
-        bootstrap.config[:distro] = config[:distro]
-        bootstrap.config[:template_file] = config[:template_file]
+        bootstrap.config[:environment] = locate_config_value(:environment)
+        bootstrap.config[:distro] = locate_config_value(:distro)
+        bootstrap.config[:template_file] = locate_config_value(:template_file)
         bootstrap
       end
 

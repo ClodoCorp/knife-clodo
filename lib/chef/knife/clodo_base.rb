@@ -41,17 +41,7 @@ class Chef
           key = key.to_sym
           config[key] || Chef::Config[:knife][key]
         end
-
-        def public_dns_name(server)
-          @public_dns_name ||= begin
-                                 Resolv.getname(server.public_ip_address)
-                               rescue
-                                 "#{server.public_ip_address.gsub('.','-')}.clodo.ru"
-                               end
-        end
-
       end
-
     end
   end
 end
