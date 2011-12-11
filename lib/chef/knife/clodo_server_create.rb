@@ -112,6 +112,12 @@ class Chef
       :proc => lambda { |o| o.split(/[\s,]+/) },
       :default => []
 
+      option :autoupdate,
+      :long => "--auto-update",
+      :description => "Allow clodo panel to autoupdate OS packages at first run? (default is do not allow)",
+      :proc => {|a| Chef::Config[:knife][:autoupdate] = 1 },
+      :default => 0
+
       def tcp_test_ssh(hostname)
         tcp_socket = TCPSocket.new(hostname, 22)
         readable = IO.select([tcp_socket], nil, nil, 5)
@@ -150,7 +156,8 @@ class Chef
           :vps_memory_max => locate_config_value(:server_memory_max),
           :vps_hdd        => locate_config_value(:server_disk),
           :vps_admin      => locate_config_value(:server_support_level),
-          :vps_os         => locate_config_value(:image)
+          :vps_os         => locate_config_value(:image),
+          :vps_autoupdate => locate_config_value(:autoupdate)
         }
 
         options[:vps_title] = config[:server_name] if config[:server_name]
