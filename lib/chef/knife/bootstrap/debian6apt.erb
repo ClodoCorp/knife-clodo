@@ -1,7 +1,9 @@
 bash -c '
 <%= "export http_proxy=\"#{knife_config[:bootstrap_proxy]}\"" if knife_config[:bootstrap_proxy] -%>
 
-while [ -d /var/adm/autoinstall/init.d -a -e /var/adm/autoinstall/init.d/* ] do
+ip route flush proto kernel scope link
+
+while [ -e /var/adm/autoinstall/init.d/* ]; do
 	echo "Autoinstallation still in progress. Waiting 5sec...";
 	sleep 5;
 done
@@ -39,7 +41,7 @@ rm /tmp/validation.pem
 <% end -%>
 
 <% if @config[:chef_node_name] %>
-[ `grep -qx "node_name \"<%= @config[:chef_node_name] %>\"" /etc/chef/client.rb` ] || echo "node_name \"<%= @config[:chef_node_name] %>\"" >> /etc/chef/client.rb
+[ `grep -qx "node_name " /etc/chef/client.rb` ] || echo "node_name \"$(hostname -f)\"" >> /etc/chef/client.rb
 <% end -%>
 
 <% if knife_config[:bootstrap_proxy] %>
