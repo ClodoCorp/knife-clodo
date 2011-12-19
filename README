@@ -2,14 +2,11 @@ knife-clodo is a knife plugin for Clodo.Ru API.
 
 It uses fog library to interact with API.
 
-At this time fog's provider for clodo is not in upstream Git,
-so you need to manually download the sources of patched to 
-support clodo fog source tree, build and install gem from it.
+Starting from fog-1.1.2, fog's provider for clodo presented
+in upstream Git, so installation and setup is as simple as 
+running "gem install knife-clodo" from command line, and
+adding next lines in your knife's configuration file:
 
-
-Usage is simple as:
-
-Write authorization data in your knife.rb as below:
 knife[:clodo_username]		=	'your@registration.email.net'     # Your email used to authorise in clodo.ru billing.
 knife[:clodo_api_key]		=	'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX' # Your API key
 knife[:clodo_api_auth_url]	=	'testapi.kh.clodo.ru'             # Domain name of API server.
@@ -23,11 +20,10 @@ knife clodo server list
 (To list your virtual servers)
 
 knife clodo server start --server=10474
-(where 10474 in --server=10474 is an ID of virtual server to 
-start)
+(where 10474 is an ID of virtual server to start)
 
 knife clodo server start --all
-(that will request start for all the servers that is not in 
+(that will request to start all of the servers that is not in 
 "is_running" or "is_request" state)
 
 knife clodo server create -d debian6apt -r "recipe[vds-performance-tests]" --server-disk=5 --server-memory=256 --server-memory-max=512 -I 541

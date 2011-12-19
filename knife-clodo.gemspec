@@ -1,8 +1,8 @@
 Gem::Specification.new do |spec|
   spec.name = 'knife-clodo'
-  spec.version = '0.1.5'
+  spec.version = '0.1.6'
   spec.summary = 'Clodo.Ru knife plugin'
-  spec.add_dependency('fog', '>= 0.11.0')
+  spec.add_dependency('fog', '>= 1.1.2')
   spec.description = <<-EOF
 	Knife plugin for Clodo.Ru cloud provider.
 EOF
