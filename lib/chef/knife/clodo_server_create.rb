@@ -115,7 +115,7 @@ class Chef
       option :autoupdate,
       :long => "--auto-update",
       :description => "Allow clodo panel to autoupdate OS packages at first run? (default is do not allow)",
-      :proc => {|a| Chef::Config[:knife][:autoupdate] = 1 },
+      :proc => Proc.new {|a| Chef::Config[:knife][:autoupdate] = 1 },
       :default => 0
 
       def tcp_test_ssh(hostname)
