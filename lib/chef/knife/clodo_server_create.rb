@@ -78,10 +78,6 @@ class Chef
       :long => "--identity-file IDENTITY_FILE",
       :description => "The SSH identity file used for authentication"
 
-      option :prerelease,
-      :long => "--prerelease",
-      :description => "Install the pre-release chef gems"
-
       option :bootstrap_version,
       :long => "--bootstrap-version VERSION",
       :description => "The version of Chef to install"
