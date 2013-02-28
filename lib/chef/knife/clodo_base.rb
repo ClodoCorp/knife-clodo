@@ -1,4 +1,5 @@
 require 'chef/knife'
+require 'excon'
 
 class Chef
   class Knife
@@ -28,9 +29,16 @@ class Chef
           option :clodo_api_auth_url,
           :long => "--clodo-api-auth-url URL",
           :description => "Your clodo.ru API auth url"
-        end
 
+          option :ssl_verify_peer,
+          :long => "--no-ssl-verify-peer",
+          :description => "Turn off peer verification (less secure)",
+          :default => true,
+          :boolean => false
+        end
+        
         def connection
+          Excon.defaults[:ssl_verify_peer] = locate_config_value(:ssl_verify_peer)
           @connection ||= Fog::Compute::Clodo.new({
                                                     :clodo_api_key  => locate_config_value(:clodo_api_key),
                                                     :clodo_username => locate_config_value(:clodo_username),
