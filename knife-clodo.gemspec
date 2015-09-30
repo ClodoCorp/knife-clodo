@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
 EOF
   spec.author = 'Stepan G. Fedorov'
   spec.email = 'sf@clodo.ru'
-  spec.homepage = 'http://clodo.ru/'
+  spec.homepage = 'https://github.com/ClodoCorp/knife-clodo'
   spec.files = `git ls-files`.split "\n"
   spec.require_paths = ["lib"]
 end
